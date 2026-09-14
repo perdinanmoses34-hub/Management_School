@@ -181,8 +181,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : INITIAL_CHAT_MESSAGES;
   });
 
-  // Google Drive Cloud Backup State
-  const connectedDriveAccount = 'pusat.drive@siakad.id';
+  // Google Drive Cloud Backup State (Akun Utama Database Firebase & Drive)
+  const connectedDriveAccount = 'perdinan.moses34@guru.smp.belajar.id';
   const [driveBackups, setDriveBackups] = useState<GoogleDriveBackupRecord[]>(() => {
     const saved = localStorage.getItem('siakad_drive_backups');
     return saved ? JSON.parse(saved) : INITIAL_DRIVE_BACKUPS;

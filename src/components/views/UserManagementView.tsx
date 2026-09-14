@@ -73,8 +73,8 @@ export const UserManagementView: React.FC = () => {
     if (selectedSchoolFilter !== 'all' && user.schoolId !== selectedSchoolFilter) {
       return false;
     }
-    // If not super admin, restrict strictly to activeSchool.id
-    if (!isSuperAdmin && user.schoolId !== activeSchool.id) {
+    // If not super admin, restrict strictly to activeSchool.id and hide super_admin
+    if (!isSuperAdmin && (user.role === 'super_admin' || user.schoolId !== activeSchool.id)) {
       return false;
     }
     // Role filter
@@ -347,7 +347,9 @@ export const UserManagementView: React.FC = () => {
                       <div className="space-y-0.5 text-[11px]">
                         <p className="text-slate-700 flex items-center gap-1">
                           <Mail className="w-3 h-3 text-slate-400" />
-                          <span className="truncate max-w-[150px]">{u.email}</span>
+                          <span className="truncate max-w-[150px]">
+                            {u.role === 'super_admin' ? '••••••••••••@guru.smp.belajar.id' : u.email}
+                          </span>
                         </p>
                         <p className="text-slate-500 flex items-center gap-1">
                           <Phone className="w-3 h-3 text-slate-400" />

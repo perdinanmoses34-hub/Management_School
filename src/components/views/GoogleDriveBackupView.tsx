@@ -17,6 +17,8 @@ import {
   ExternalLink,
   Layers,
   Archive,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
@@ -41,7 +43,18 @@ export const GoogleDriveBackupView: React.FC = () => {
 
   const [isBackingUp, setIsBackingUp] = useState(false);
   const [restoreMessage, setRestoreMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const [showFullEmail, setShowFullEmail] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const maskEmail = (email: string) => {
+    if (!email) return '••••••••••••••••';
+    const parts = email.split('@');
+    if (parts.length < 2) return '••••••••••••••••';
+    const name = parts[0];
+    const domain = parts[1];
+    const maskedName = name.length > 4 ? `${name.slice(0, 1)}••••••••••••${name.slice(-2)}` : '••••••••';
+    return `${maskedName}@${domain}`;
+  };
 
   const handleCreateBackup = async () => {
     setIsBackingUp(true);
@@ -93,7 +106,7 @@ export const GoogleDriveBackupView: React.FC = () => {
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-500">
-              Pengaturan Firestore Firebase & Pencadangan Otomatis Google Drive ({connectedDriveAccount})
+              Pengaturan Firestore Firebase & Pencadangan Otomatis Google Drive (Database Utama Terhubung)
             </p>
           </div>
         </div>
@@ -132,11 +145,26 @@ export const GoogleDriveBackupView: React.FC = () => {
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100"></span>
           </div>
           <div>
-            <p className="font-mono text-xs font-extrabold text-slate-900 truncate">
-              {connectedDriveAccount}
-            </p>
-            <p className="text-[11px] text-slate-500 mt-0.5">
-              Koneksi Penyimpanan: Google Workspace for Education
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-mono text-xs font-extrabold text-slate-900 truncate">
+                {showFullEmail ? connectedDriveAccount : maskEmail(connectedDriveAccount)}
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowFullEmail(!showFullEmail)}
+                title={showFullEmail ? 'Sembunyikan alamat akun' : 'Lihat akun'}
+                className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+              >
+                {showFullEmail ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+            <div className="flex items-center gap-1.5 mt-1">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <Lock className="w-2.5 h-2.5" /> Akun Terlindungi & Disembunyikan
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 mt-1">
+              Koneksi Penyimpanan: Google Workspace for Education (Firebase & Drive DB)
             </p>
           </div>
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
@@ -297,7 +325,7 @@ export const GoogleDriveBackupView: React.FC = () => {
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
               <Lock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
               <span>
-                <strong>Otorisasi Berlapis:</strong> Operasi pemulihan (restore) database wajib melalui otentikasi dua faktor (2FA) oleh Super Admin <code>tn.timbu</code>.
+                <strong>Otorisasi Berlapis:</strong> Operasi pemulihan (restore) database wajib melalui otentikasi dua faktor (2FA) oleh Super Administrator.
               </span>
             </div>
           </div>
@@ -343,7 +371,7 @@ export const GoogleDriveBackupView: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-5 py-4 font-mono text-[11px] text-slate-600">
-                    {bak.accountEmail}
+                    {showFullEmail ? bak.accountEmail : maskEmail(bak.accountEmail)}
                   </td>
                   <td className="px-5 py-4 font-mono font-bold text-slate-700">
                     {bak.fileSizeKb} KB
