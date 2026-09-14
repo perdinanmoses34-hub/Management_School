@@ -1,0 +1,11 @@
+{
+  "name": "SIAKAD Budi Mulia - Sistem Informasi Akademik Sekolah Terpadu",
+  "description": "Platform Sistem Informasi Akademik Sekolah (SIAKAD) profesional & responsif Android: absensi biometrik & geolokasi, pembayaran SPP online, manajemen nilai cloud, analitik kepala sekolah & super admin, enkripsi E2EE, sinkronisasi Dukcapil, serta dukungan offline.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
