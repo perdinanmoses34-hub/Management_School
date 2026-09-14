@@ -20,6 +20,18 @@ export interface UserAccount {
   status: 'aktif' | 'nonaktif' | 'menunggu_verifikasi';
 }
 
+export interface DashboardCardsConfig {
+  showHeroBanner: boolean;
+  showStatsBar: boolean;
+  showGradesCard: boolean;
+  showAttendanceCard: boolean;
+  showSppCard: boolean;
+  showDukcapilCard: boolean;
+  showAnnouncementSection: boolean;
+  showSchoolProfileSection: boolean;
+  showQuickRegisterBanner: boolean;
+}
+
 export interface AppearanceConfig {
   id: string;
   schoolId: string;
@@ -38,6 +50,11 @@ export interface AppearanceConfig {
   showSchoolBadge: boolean;
   updatedAt: string;
   updatedBy: string;
+  // Dashboard Customization by Admin
+  welcomeTitle?: string;
+  welcomeSubtitle?: string;
+  cardStyle?: 'rounded-xl' | 'rounded-2xl' | 'rounded-3xl' | 'bordered';
+  dashboardCards?: DashboardCardsConfig;
 }
 
 export interface ChatMessage {
@@ -77,6 +94,7 @@ export interface SchoolEntity {
   status: 'aktif' | 'nonaktif' | 'kadaluarsa';
   packageType: 'Enterprise' | 'Pro' | 'Standard';
   expiredDate: string;
+  registeredAt?: string;
   studentCount: number;
   teacherCount: number;
   latitude: number;

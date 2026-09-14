@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { Navbar } from './components/Navbar';
 import { MobileBottomNav } from './components/MobileBottomNav';
@@ -6,6 +6,7 @@ import { NotificationModal } from './components/NotificationModal';
 import { SecurityCenterModal } from './components/SecurityCenterModal';
 import { TwoFactorModal } from './components/TwoFactorModal';
 import { AuthModal } from './components/AuthModal';
+import { SchoolRegisterModal } from './components/SchoolRegisterModal';
 
 import { SchoolPublicHomeView } from './components/views/SchoolPublicHomeView';
 import { AcademicManagementView } from './components/views/AcademicManagementView';
@@ -18,17 +19,19 @@ import { RealtimeChatView } from './components/views/RealtimeChatView';
 import { ThemeCustomizerView } from './components/views/ThemeCustomizerView';
 import { UserManagementView } from './components/views/UserManagementView';
 import { GoogleDriveBackupView } from './components/views/GoogleDriveBackupView';
-import { ShieldCheck, WifiOff, RefreshCw } from 'lucide-react';
+import { ShieldCheck, WifiOff, RefreshCw, Lock } from 'lucide-react';
 
 const MainAppContent: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('beranda');
   const {
+    activeTab,
+    setActiveTab,
     activeSchool,
     isOnline,
     offlineQueue,
     syncOfflineQueue,
     isSyncing,
     appearance,
+    setIsAuthModalOpen,
   } = useApp();
 
   return (
@@ -111,6 +114,14 @@ const MainAppContent: React.FC = () => {
               </span>
               <span>Terintegrasi API Kemendikbud & Dukcapil Kemendagri</span>
               <span>© {new Date().getFullYear()} {appearance.appName}</span>
+              <button
+                onClick={() => setIsAuthModalOpen(true)}
+                title="Akses Portal SIAKAD"
+                className="text-slate-400 hover:text-slate-600 transition flex items-center gap-1 cursor-pointer ml-1"
+              >
+                <Lock className="w-3 h-3" />
+                <span className="text-[10px]">Portal</span>
+              </button>
             </div>
           </div>
         </div>
@@ -121,6 +132,7 @@ const MainAppContent: React.FC = () => {
       <SecurityCenterModal />
       <TwoFactorModal />
       <AuthModal />
+      <SchoolRegisterModal />
 
       {/* Mobile Bottom Navigation Bar (Android & iOS Responsive) */}
       <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />

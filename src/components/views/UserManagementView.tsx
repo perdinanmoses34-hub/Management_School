@@ -216,7 +216,7 @@ export const UserManagementView: React.FC = () => {
         <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl text-xs flex items-center gap-2">
           <Shield className="w-4 h-4 text-amber-600 shrink-0" />
           <span>
-            Mode Peninjauan: Hanya <strong>Super Admin (tn.timbu)</strong> atau <strong>Admin Sekolah ({activeSchool.name})</strong> yang dapat membuat akun, mereset password, atau menghapus pengguna.
+            Mode Peninjauan: Hanya <strong>Admin Sekolah ({activeSchool.name})</strong> yang dapat membuat akun, mereset password, atau menghapus pengguna.
           </span>
         </div>
       )}

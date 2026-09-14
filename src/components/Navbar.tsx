@@ -45,6 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
     setIsNotifModalOpen,
     setIsSecurityModalOpen,
     setIsAuthModalOpen,
+    setIsRegisterModalOpen,
     appearance,
     chatMessages,
     isFirestoreConnected,
@@ -53,14 +54,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const rolesList: { id: Role; label: string; desc: string }[] = [
-    { id: 'super_admin', label: '👑 ' + t.roles.super_admin, desc: 'Root Platform, Multi-Sekolah, tn.timbu' },
+  const baseRolesList: { id: Role; label: string; desc: string }[] = [
     { id: 'admin_sekolah', label: '🏢 ' + t.roles.admin_sekolah, desc: 'Kelola Akun Guru, Siswa & Ortu, Tampilan' },
     { id: 'kepala_sekolah', label: '🎓 ' + t.roles.kepala_sekolah, desc: 'Dashboard Analitik & Laporan' },
     { id: 'guru', label: '👨‍🏫 ' + t.roles.guru, desc: 'Input Nilai Cloud, Absensi, Materi' },
     { id: 'siswa', label: '🎒 ' + t.roles.siswa, desc: 'Rapor Digital, SPP Online, Absensi' },
     { id: 'orang_tua', label: '👨‍👩‍👧 ' + t.roles.orang_tua, desc: 'Pantau Anak, Tagihan SPP & Rapor' },
   ];
+
+  // Super Admin role is hidden from the public role list and only visible if currently logged in as super_admin
+  const rolesList = currentRole === 'super_admin'
+    ? [{ id: 'super_admin' as Role, label: '👑 SIAKAD Pusat (Super Admin)', desc: 'Panel Kendali Pemilik Sistem' }, ...baseRolesList]
+    : baseRolesList;
 
   const handleRoleSelect = (role: Role) => {
     setCurrentRole(role);
@@ -89,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
     { id: 'pengguna', label: t.nav.pengguna, roles: ['super_admin', 'admin_sekolah'] },
     { id: 'tampilan', label: t.nav.tampilan, roles: ['super_admin', 'admin_sekolah'] },
     { id: 'cloudBackup', label: t.nav.cloudBackup, roles: ['super_admin', 'admin_sekolah'] },
-    { id: 'superAdmin', label: t.nav.superAdmin, roles: ['super_admin'] },
+    { id: 'superAdmin', label: 'SIAKAD Pusat', roles: ['super_admin'] },
   ];
 
   const visibleNavItems = navItems.filter(
@@ -204,11 +209,22 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
           {/* Right Action Tools */}
           <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* School Registration Link Trigger */}
+            <button
+              id="btn-register-school"
+              onClick={() => setIsRegisterModalOpen(true)}
+              title="Daftarkan Sekolah & Akun Admin Baru"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition shadow-xs cursor-pointer"
+            >
+              <School className="w-3.5 h-3.5 text-blue-600" />
+              <span className="hidden sm:inline">Daftar Sekolah</span>
+            </button>
+
             {/* Quick Login with Credentials Modal Trigger */}
             <button
               id="btn-login-credentials"
               onClick={() => setIsAuthModalOpen(true)}
-              title="Masuk dengan Username & Kata Sandi (tn.timbu / Eklesia_030918.)"
+              title="Masuk ke Akun SIAKAD"
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold transition shadow-xs cursor-pointer"
             >
               <KeyRound className="w-3.5 h-3.5 text-amber-600" />

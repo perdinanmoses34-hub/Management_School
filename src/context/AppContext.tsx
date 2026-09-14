@@ -47,6 +47,14 @@ interface AppContextType {
   deleteUser: (id: string) => Promise<void>;
   resetUserPassword: (id: string, newPass: string) => Promise<void>;
   loginWithCredentials: (username: string, pass: string) => { success: boolean; message: string; user?: UserAccount };
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  isRegisterModalOpen: boolean;
+  setIsRegisterModalOpen: (open: boolean) => void;
+  registerSchoolAndAdmin: (
+    schoolData: Omit<SchoolEntity, 'id'>,
+    adminData: { name: string; username: string; password: string; email: string; phone: string }
+  ) => Promise<{ success: boolean; school: SchoolEntity; admin: UserAccount }>;
   schools: SchoolEntity[];
   activeSchool: SchoolEntity;
   setActiveSchoolId: (id: string) => void;
@@ -102,8 +110,20 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('id');
-  const [currentRole, setCurrentRoleState] = useState<Role>('super_admin');
+  const [currentRole, setCurrentRoleState] = useState<Role>('admin_sekolah');
+  const [activeTab, setActiveTabState] = useState<string>('beranda');
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState<boolean>(false);
   const [isFirestoreConnected, setIsFirestoreConnected] = useState<boolean>(false);
+
+  // Auto detect registration parameter in URL
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('register') === 'school' || params.get('daftar') === 'sekolah' || params.get('daftar') === '1') {
+        setIsRegisterModalOpen(true);
+      }
+    }
+  }, []);
 
   // Schools state
   const [schools, setSchools] = useState<SchoolEntity[]>(() => {
@@ -118,9 +138,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : INITIAL_USER_DIRECTORY;
   });
 
-  // Current logged in user (defaults to Super Admin Tn. Timbu)
+  // Current logged in user (defaults to School Admin Bagus Prasetyo, S.Kom)
   const [currentUser, setCurrentUserState] = useState<UserAccount>(() => {
-    return INITIAL_USERS.super_admin;
+    return INITIAL_USERS.admin_sekolah;
   });
 
   // Academic & Student state
@@ -162,7 +182,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // Google Drive Cloud Backup State
-  const connectedDriveAccount = 'perdinan.moses34@guru.smp.belajar.id';
+  const connectedDriveAccount = 'pusat.drive@siakad.id';
   const [driveBackups, setDriveBackups] = useState<GoogleDriveBackupRecord[]>(() => {
     const saved = localStorage.getItem('siakad_drive_backups');
     return saved ? JSON.parse(saved) : INITIAL_DRIVE_BACKUPS;
@@ -328,16 +348,56 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCurrentRoleState(user.role);
   };
 
-  // Login with Username & Password (including tn.timbu / Eklesia_030918.)
+  // Login with Username & Password - redirects directly to role-specific dashboard page
   const loginWithCredentials = (username: string, pass: string) => {
     const cleanUser = username.trim().toLowerCase();
-    // Check in allUsers
+    
+    // Check default tn.timbu credentials explicitly (Super Admin)
+    if (cleanUser === 'tn.timbu' && (pass === 'Eklesia_030918.' || pass === INITIAL_USERS.super_admin.password)) {
+      const superAdminUser = INITIAL_USERS.super_admin;
+      setCurrentUser(superAdminUser);
+      setActiveTabState('superAdmin'); // Immediately redirects to SIAKAD Super Admin Dashboard
+      appendAuditLog(
+        'SUPER_ADMIN_LOGIN',
+        'Tn. Timbu',
+        'Super Administrator login via username: tn.timbu.'
+      );
+      addNotification({
+        title: 'Login Berhasil - SIAKAD Pusat',
+        message: 'Akses penuh pemilik sistem diaktifkan (tn.timbu). Mengarahkan ke Dashboard SIAKAD.',
+        category: 'keamanan',
+      });
+      return { success: true, message: 'Selamat datang di SIAKAD Pusat', user: superAdminUser };
+    }
+
+    // Check in allUsers (including dynamically registered admins, teachers, parents, students)
     const user = allUsers.find(
       (u) => u.username.toLowerCase() === cleanUser && u.password === pass
     );
 
     if (user) {
       setCurrentUser(user);
+      if (user.schoolId && user.schoolId !== 'sch_global') {
+        setActiveSchoolIdState(user.schoolId);
+      }
+      
+      // Directly direct user to their respective role dashboard:
+      if (user.role === 'super_admin') {
+        setActiveTabState('superAdmin');
+      } else if (user.role === 'admin_sekolah') {
+        setActiveTabState('pengguna');
+      } else if (user.role === 'kepala_sekolah') {
+        setActiveTabState('analitik');
+      } else if (user.role === 'guru') {
+        setActiveTabState('akademik');
+      } else if (user.role === 'siswa') {
+        setActiveTabState('akademik');
+      } else if (user.role === 'orang_tua') {
+        setActiveTabState('spp');
+      } else {
+        setActiveTabState('beranda');
+      }
+
       appendAuditLog(
         'USER_LOGIN_SUCCESS',
         user.name,
@@ -345,27 +405,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       );
       addNotification({
         title: 'Login Berhasil',
-        message: `Selamat datang kembali, ${user.name} [${user.role.toUpperCase()}].`,
+        message: `Selamat datang, ${user.name}! Mengarahkan ke panel ${user.role.replace('_', ' ').toUpperCase()}.`,
         category: 'keamanan',
       });
       return { success: true, message: `Login berhasil sebagai ${user.name}`, user };
-    }
-
-    // Check default tn.timbu credentials explicitly
-    if (cleanUser === 'tn.timbu' && pass === 'Eklesia_030918.') {
-      const superAdminUser = INITIAL_USERS.super_admin;
-      setCurrentUser(superAdminUser);
-      appendAuditLog(
-        'SUPER_ADMIN_LOGIN',
-        'Tn. Timbu',
-        'Super Administrator login via username: tn.timbu.'
-      );
-      addNotification({
-        title: 'Login Super Admin Sukses',
-        message: 'Akses penuh pemilik sistem diaktifkan (tn.timbu).',
-        category: 'keamanan',
-      });
-      return { success: true, message: 'Selamat datang Super Admin tn.timbu', user: superAdminUser };
     }
 
     return { success: false, message: 'Username atau Password salah. Periksa kembali data Anda.' };
@@ -555,6 +598,72 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       message: `${newSchool.name} terdaftar. Akun Admin: ${generatedUsername} dapat langsung mengelola akun guru, siswa, dan orang tua.`,
       category: 'sistem',
     });
+  };
+
+  // Registration System: User registers a new school & admin via shared invitation link
+  const registerSchoolAndAdmin = async (
+    schoolData: Omit<SchoolEntity, 'id'>,
+    adminData: { name: string; username: string; password: string; email: string; phone: string }
+  ) => {
+    const newSchoolId = 'sch_' + Date.now();
+    const newSchool: SchoolEntity = {
+      ...schoolData,
+      id: newSchoolId,
+      status: 'aktif',
+      packageType: schoolData.packageType || 'Pro',
+      registeredAt: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }),
+      expiredDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    };
+    setSchools((prev) => [...prev, newSchool]);
+
+    const newAdmin: UserAccount = {
+      id: 'usr_adm_' + Date.now(),
+      username: adminData.username.trim().toLowerCase(),
+      password: adminData.password,
+      name: adminData.name,
+      email: adminData.email || `${adminData.username}@${newSchool.npsn || 'sekolah'}.sch.id`,
+      role: 'admin_sekolah',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      nipOrNisn: `NIP-${newSchool.npsn || 'ADM'}-01`,
+      phone: adminData.phone || '+62 812-0000-2222',
+      schoolId: newSchoolId,
+      schoolName: newSchool.name,
+      is2FAEnabled: false,
+      lastLogin: 'Baru saja terdaftar',
+      status: 'aktif',
+    };
+
+    setAllUsers((prev) => [...prev, newAdmin]);
+    setActiveSchoolIdState(newSchoolId);
+    setCurrentUserState(newAdmin);
+    setCurrentRoleState('admin_sekolah');
+    setActiveTabState('pengguna'); // Automatically route to User Management so admin can immediately add Kepsek, Guru, Ortu, Siswa
+
+    // Set custom appearance for this newly registered school
+    const customAppearance: AppearanceConfig = {
+      ...DEFAULT_APPEARANCE,
+      id: 'appr_' + newSchoolId,
+      schoolId: newSchoolId,
+      appName: 'SIAKAD ' + newSchool.name,
+      schoolName: newSchool.name,
+      updatedBy: newAdmin.name,
+      updatedAt: 'Baru saja',
+    };
+    setAppearance(customAppearance);
+
+    await appendAuditLog(
+      'SCHOOL_SELF_REGISTRATION',
+      newSchool.name,
+      `Pendaftaran mandiri sekolah baru berhasil: ${newSchool.name} (NPSN: ${newSchool.npsn}). Admin: ${newAdmin.username}`
+    );
+
+    addNotification({
+      title: 'Pendaftaran Sekolah Sukses! 🎉',
+      message: `Selamat datang ${newAdmin.name}! Sekolah ${newSchool.name} siap digunakan. Silakan mulai buat akun Kepala Sekolah, Guru, Siswa, dan Orang Tua.`,
+      category: 'sistem',
+    });
+
+    return { success: true, school: newSchool, admin: newAdmin };
   };
 
   const updateSchoolStatus = (id: string, status: 'aktif' | 'nonaktif' | 'kadaluarsa') => {
@@ -980,12 +1089,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCurrentRole,
         currentUser,
         setCurrentUser,
-        allUsers,
+        allUsers: currentRole === 'super_admin' ? allUsers : allUsers.filter((u) => u.role !== 'super_admin'),
         addUser,
         updateUser,
         deleteUser,
         resetUserPassword,
         loginWithCredentials,
+        activeTab,
+        setActiveTab: (tab: string) => setActiveTabState(tab),
+        isRegisterModalOpen,
+        setIsRegisterModalOpen,
+        registerSchoolAndAdmin,
         schools,
         activeSchool,
         setActiveSchoolId: (id) => setActiveSchoolIdState(id),

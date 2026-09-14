@@ -16,9 +16,12 @@ import {
   Bell,
   Sun,
   Laptop,
+  LayoutGrid,
+  Layers,
+  CheckSquare,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { AppearanceConfig } from '../../types';
+import { AppearanceConfig, DashboardCardsConfig } from '../../types';
 
 const COLOR_PRESETS = [
   {
@@ -107,7 +110,20 @@ export const ThemeCustomizerView: React.FC = () => {
   const isAuthorized = currentRole === 'super_admin' || currentRole === 'admin_sekolah';
 
   // Form local state
-  const [formConfig, setFormConfig] = useState<AppearanceConfig>({ ...appearance });
+  const [formConfig, setFormConfig] = useState<AppearanceConfig>({
+    ...appearance,
+    dashboardCards: appearance.dashboardCards || {
+      showQuickStats: true,
+      showAcademicSummary: true,
+      showAttendanceCard: true,
+      showSppCard: true,
+      showAnnouncementsCard: true,
+      showQuickActions: true,
+      cardStyle: 'bordered',
+      cardDensity: 'normal',
+      accentColor: appearance.primaryHex || '#1d4ed8',
+    },
+  });
   const [isSavedRecently, setIsSavedRecently] = useState(false);
 
   const handlePresetSelect = (preset: typeof COLOR_PRESETS[0]) => {
@@ -139,6 +155,17 @@ export const ThemeCustomizerView: React.FC = () => {
       cardRadius: 'rounded-2xl',
       headerAnnouncement: 'Portal Pembelajaran Digital & Evaluasi Akademik Terintegrasi Cloud',
       showSchoolBadge: true,
+      dashboardCards: {
+        showQuickStats: true,
+        showAcademicSummary: true,
+        showAttendanceCard: true,
+        showSppCard: true,
+        showAnnouncementsCard: true,
+        showQuickActions: true,
+        cardStyle: 'bordered',
+        cardDensity: 'normal',
+        accentColor: '#1d4ed8',
+      },
     });
   };
 
@@ -201,7 +228,7 @@ export const ThemeCustomizerView: React.FC = () => {
         <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl text-xs flex items-center gap-2 font-medium">
           <Sliders className="w-4 h-4 text-amber-600 shrink-0" />
           <span>
-            Perhatian: Anda sedang melihat mode pratinjau. Hanya akun <strong>Super Admin (tn.timbu)</strong> atau <strong>Admin Sekolah ({activeSchool.name})</strong> yang memiliki izin menyimpan perubahan tema secara permanen ke server cloud.
+            Perhatian: Anda sedang melihat mode pratinjau. Hanya akun <strong>Admin Sekolah ({activeSchool.name})</strong> atau Pengelola Sistem yang memiliki izin menyimpan perubahan tema secara permanen ke server cloud.
           </span>
         </div>
       )}
@@ -440,6 +467,173 @@ export const ThemeCustomizerView: React.FC = () => {
                   Tampilkan Lencana Akreditasi Resmi ({activeSchool.accreditation}) di Navbar
                 </span>
               </label>
+            </div>
+          </div>
+
+          {/* Dashboard Cards & Layout Customization */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-5">
+            <div>
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <LayoutGrid className="w-4 h-4 text-indigo-600" />
+                Kustomisasi Kartu & Modul Dashboard (Admin)
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Atur modul kartu yang tampil di beranda sekolah, gaya bayangan kartu, dan tingkat kerapatan visual
+              </p>
+            </div>
+
+            {/* Card Style & Density */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-3 border-b border-slate-100">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Gaya Desain Kartu (Card Style)
+                </label>
+                <select
+                  value={formConfig.dashboardCards?.cardStyle || 'bordered'}
+                  onChange={(e) =>
+                    setFormConfig((prev) => ({
+                      ...prev,
+                      dashboardCards: {
+                        ...(prev.dashboardCards || {
+                          showQuickStats: true,
+                          showAcademicSummary: true,
+                          showAttendanceCard: true,
+                          showSppCard: true,
+                          showAnnouncementsCard: true,
+                          showQuickActions: true,
+                          cardDensity: 'normal',
+                          accentColor: prev.primaryHex,
+                        }),
+                        cardStyle: e.target.value as any,
+                      },
+                    }))
+                  }
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white cursor-pointer"
+                >
+                  <option value="bordered">Berbingkai Rapi (Bordered Minimalist)</option>
+                  <option value="elevated">Bayangan Melayang (Elevated Shadow)</option>
+                  <option value="flat">Datar Bersih (Flat Solid)</option>
+                  <option value="gradient">Sentuhan Gradien Halus (Gradient Tint)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Kerapatan Kartu (Density)
+                </label>
+                <select
+                  value={formConfig.dashboardCards?.cardDensity || 'normal'}
+                  onChange={(e) =>
+                    setFormConfig((prev) => ({
+                      ...prev,
+                      dashboardCards: {
+                        ...(prev.dashboardCards || {
+                          showQuickStats: true,
+                          showAcademicSummary: true,
+                          showAttendanceCard: true,
+                          showSppCard: true,
+                          showAnnouncementsCard: true,
+                          showQuickActions: true,
+                          cardStyle: 'bordered',
+                          accentColor: prev.primaryHex,
+                        }),
+                        cardDensity: e.target.value as any,
+                      },
+                    }))
+                  }
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white cursor-pointer"
+                >
+                  <option value="compact">Kompak (Hemat Ruang Layar)</option>
+                  <option value="normal">Normal (Standar Seimbang)</option>
+                  <option value="spacious">Lapang (Spacious & Elegan)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Individual Card Toggles */}
+            <div className="space-y-2.5">
+              <label className="block text-xs font-bold text-slate-700">
+                Pilih Kartu Modul yang Diaktifkan di Beranda:
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {[
+                  {
+                    key: 'showQuickStats' as const,
+                    label: 'Banner Identitas & Akreditasi',
+                    desc: 'NPSN, akreditasi, nama kepala sekolah',
+                  },
+                  {
+                    key: 'showQuickActions' as const,
+                    label: 'Seksi Layanan Unggulan',
+                    desc: 'Kontainer navigasi kartu interaktif',
+                  },
+                  {
+                    key: 'showAcademicSummary' as const,
+                    label: 'Kartu Nilai & Rapor Digital',
+                    desc: 'Akses modul evaluasi akademik cloud',
+                  },
+                  {
+                    key: 'showAttendanceCard' as const,
+                    label: 'Kartu Absensi Geofence GPS',
+                    desc: 'Akses pemindai biometrik kehadiran',
+                  },
+                  {
+                    key: 'showSppCard' as const,
+                    label: 'Kartu Pembayaran SPP Online',
+                    desc: 'Akses QRIS & kuitansi tagihan',
+                  },
+                  {
+                    key: 'showAnnouncementsCard' as const,
+                    label: 'Papan Pengumuman & Agenda',
+                    desc: 'Jadwal kalender pendidikan sekolah',
+                  },
+                ].map((card) => {
+                  const currentCards = formConfig.dashboardCards || {
+                    showQuickStats: true,
+                    showAcademicSummary: true,
+                    showAttendanceCard: true,
+                    showSppCard: true,
+                    showAnnouncementsCard: true,
+                    showQuickActions: true,
+                    cardStyle: 'bordered',
+                    cardDensity: 'normal',
+                    accentColor: formConfig.primaryHex,
+                  };
+                  const isChecked = !!currentCards[card.key];
+
+                  return (
+                    <div
+                      key={card.key}
+                      onClick={() =>
+                        setFormConfig((prev) => ({
+                          ...prev,
+                          dashboardCards: {
+                            ...(prev.dashboardCards || currentCards),
+                            [card.key]: !isChecked,
+                          },
+                        }))
+                      }
+                      className={`p-3 rounded-xl border text-left cursor-pointer transition flex items-start gap-2.5 ${
+                        isChecked
+                          ? 'bg-blue-50/60 border-blue-200 text-slate-900'
+                          : 'bg-slate-50 border-slate-200 text-slate-400 opacity-60'
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => {}}
+                        className="mt-0.5 rounded text-blue-600 focus:ring-blue-500 border-slate-300 pointer-events-none"
+                      />
+                      <div>
+                        <p className="text-xs font-bold leading-tight">{card.label}</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5 leading-snug">{card.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

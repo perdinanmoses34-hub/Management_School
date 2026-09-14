@@ -90,7 +90,7 @@ export const INITIAL_USERS: Record<string, UserAccount> = {
     username: 'tn.timbu',
     password: 'Eklesia_030918.',
     name: 'Tn. Timbu (Super Administrator)',
-    email: 'perdinan.moses34@guru.smp.belajar.id',
+    email: 'superadmin@siakad.id',
     role: 'super_admin',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
     nipOrNisn: '19750812 199903 1 002',
@@ -275,7 +275,21 @@ export const DEFAULT_APPEARANCE: AppearanceConfig = {
   headerAnnouncement: 'Penerimaan Peserta Didik Baru (PPDB) & Penilaian Tengah Semester Terintegrasi Cloud',
   showSchoolBadge: true,
   updatedAt: 'Baru saja',
-  updatedBy: 'tn.timbu (Super Admin)',
+  updatedBy: 'Admin Sekolah',
+  welcomeTitle: 'Selamat Datang di Portal Terpadu',
+  welcomeSubtitle: 'Sistem Informasi Akademik Sekolah (SIAKAD) modern dengan manajemen nilai cloud, absensi biometrik & geofencing GPS, portal pembayaran SPP instan, sinkronisasi Dukcapil, serta perlindungan privasi enkripsi E2EE.',
+  cardStyle: 'rounded-2xl',
+  dashboardCards: {
+    showHeroBanner: true,
+    showStatsBar: true,
+    showGradesCard: true,
+    showAttendanceCard: true,
+    showSppCard: true,
+    showDukcapilCard: true,
+    showAnnouncementSection: true,
+    showSchoolProfileSection: true,
+    showQuickRegisterBanner: true,
+  },
 };
 
 export const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
@@ -288,7 +302,7 @@ export const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
     senderName: 'Tn. Timbu (Super Admin)',
     senderRole: 'super_admin',
     senderAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-    content: 'Selamat datang di SIAKAD Realtime terintegrasi Firebase Cloud & Google Drive Backup (perdinan.moses34@guru.smp.belajar.id). Semua data akademik, absensi, dan keuangan terenkripsi aman.',
+    content: 'Selamat datang di SIAKAD Realtime terintegrasi Firebase Cloud & Google Drive Backup (pusat.drive@siakad.id). Semua data akademik, absensi, dan keuangan terenkripsi aman.',
     timestamp: '08:00 WIB',
     createdAt: Date.now() - 3600000 * 2,
     reactions: { '👍': ['tn.timbu', 'admin.budimulia'] },
@@ -356,7 +370,7 @@ export const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
     senderName: 'Tn. Timbu (Super Admin)',
     senderRole: 'super_admin',
     senderAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-    content: 'Pemberitahuan Lisensi: Backup database otomatis ke Google Drive (perdinan.moses34@guru.smp.belajar.id) berjalan aktif setiap hari. Server Firebase Firestore status optimal.',
+    content: 'Pemberitahuan Lisensi: Backup database otomatis ke Google Drive (pusat.drive@siakad.id) berjalan aktif setiap hari. Server Firebase Firestore status optimal.',
     timestamp: '10:15 WIB',
     createdAt: Date.now() - 300000,
     reactions: { '🔥': ['admin.budimulia', 'admin.teladan'] },
@@ -366,7 +380,7 @@ export const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
 export const INITIAL_DRIVE_BACKUPS: GoogleDriveBackupRecord[] = [
   {
     id: 'bak_01',
-    accountEmail: 'perdinan.moses34@guru.smp.belajar.id',
+    accountEmail: 'pusat.drive@siakad.id',
     fileName: 'SIAKAD_BACKUP_MASTER_2026-09-14_0430.json',
     fileSizeKb: 198.4,
     timestamp: 'Hari ini, 04:30 WIB',
@@ -378,7 +392,7 @@ export const INITIAL_DRIVE_BACKUPS: GoogleDriveBackupRecord[] = [
   },
   {
     id: 'bak_02',
-    accountEmail: 'perdinan.moses34@guru.smp.belajar.id',
+    accountEmail: 'pusat.drive@siakad.id',
     fileName: 'SIAKAD_BACKUP_AUTO_2026-09-13_2359.json',
     fileSizeKb: 194.2,
     timestamp: 'Kemarin, 23:59 WIB',

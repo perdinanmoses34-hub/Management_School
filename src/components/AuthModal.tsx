@@ -19,6 +19,7 @@ export const AuthModal: React.FC = () => {
     isAuthModalOpen,
     setIsAuthModalOpen,
     loginWithCredentials,
+    setIsRegisterModalOpen,
     appearance,
   } = useApp();
 
@@ -48,7 +49,7 @@ export const AuthModal: React.FC = () => {
         setUsername('');
         setPassword('');
         setSuccessMessage('');
-      }, 900);
+      }, 700);
     } else {
       setErrorMessage(result.message);
     }
@@ -84,7 +85,7 @@ export const AuthModal: React.FC = () => {
               Masuk ke SIAKAD Cloud
             </h2>
             <p className="text-xs text-slate-500">
-              Masukkan username dan kata sandi akun Anda yang terdaftar
+              Masukkan username dan password Anda untuk masuk ke sistem
             </p>
           </div>
         </div>
@@ -107,7 +108,7 @@ export const AuthModal: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">
-              Username
+              Username Pengguna
             </label>
             <div className="relative">
               <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -115,7 +116,7 @@ export const AuthModal: React.FC = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="misal: tn.timbu atau admin.budimulia"
+                placeholder="misal: admin.budimulia atau guru.siti"
                 autoFocus
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
@@ -124,7 +125,7 @@ export const AuthModal: React.FC = () => {
 
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">
-              Kata Sandi
+              Kata Sandi (Password)
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -155,27 +156,14 @@ export const AuthModal: React.FC = () => {
           </button>
         </form>
 
-        {/* Quick Credentials Helper Buttons */}
-        <div className="mt-6 pt-4 border-t border-slate-100 space-y-2">
+        {/* Quick Credentials Helper Buttons (Super Admin is completely hidden from public view) */}
+        <div className="mt-5 pt-4 border-t border-slate-100 space-y-2">
           <p className="text-[11px] font-bold text-slate-600 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            Masuk Cepat dengan Akun Bawaan (Default):
+            Contoh Akun Peran Demo:
           </p>
 
           <div className="grid grid-cols-2 gap-2 text-left">
-            {/* Super Admin tn.timbu */}
-            <button
-              type="button"
-              onClick={() => fillCredentials('tn.timbu', 'Eklesia_030918.')}
-              className="p-2 rounded-xl bg-purple-50 hover:bg-purple-100/70 border border-purple-200 text-purple-900 transition cursor-pointer"
-            >
-              <p className="text-[10px] font-extrabold flex items-center justify-between">
-                <span>👑 Super Admin</span>
-                <span className="text-[9px] bg-purple-200 px-1 rounded font-mono">ROOT</span>
-              </p>
-              <p className="text-[10px] font-mono text-purple-700">tn.timbu</p>
-            </button>
-
             {/* Admin Sekolah */}
             <button
               type="button"
@@ -186,6 +174,18 @@ export const AuthModal: React.FC = () => {
                 <span>🏢 Admin Sekolah</span>
               </p>
               <p className="text-[10px] font-mono text-blue-700">admin.budimulia</p>
+            </button>
+
+            {/* Kepala Sekolah */}
+            <button
+              type="button"
+              onClick={() => fillCredentials('kepsek.nurul', 'Kepsek_Nurul123!')}
+              className="p-2 rounded-xl bg-indigo-50 hover:bg-indigo-100/70 border border-indigo-200 text-indigo-900 transition cursor-pointer"
+            >
+              <p className="text-[10px] font-extrabold flex items-center justify-between">
+                <span>🎓 Kepala Sekolah</span>
+              </p>
+              <p className="text-[10px] font-mono text-indigo-700">kepsek.nurul</p>
             </button>
 
             {/* Guru */}
@@ -206,6 +206,21 @@ export const AuthModal: React.FC = () => {
             >
               <p className="text-[10px] font-extrabold">👨‍👩‍👧 Orang Tua Siswa</p>
               <p className="text-[10px] font-mono text-rose-700">ortu.rizky</p>
+            </button>
+          </div>
+
+          {/* Registration Link */}
+          <div className="pt-3 text-center border-t border-slate-100">
+            <button
+              type="button"
+              onClick={() => {
+                setIsAuthModalOpen(false);
+                setIsRegisterModalOpen(true);
+              }}
+              className="text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer flex items-center justify-center gap-1 mx-auto"
+            >
+              <span>Belum punya akun sekolah?</span>
+              <span className="underline font-bold">Daftarkan Sekolah Baru</span>
             </button>
           </div>
         </div>
