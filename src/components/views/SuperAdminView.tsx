@@ -47,6 +47,8 @@ export const SuperAdminView: React.FC = () => {
   const [formAddress, setFormAddress] = useState('');
   const [formRadius, setFormRadius] = useState(150);
   const [formExpiry, setFormExpiry] = useState('2027-12-31');
+  const [formAdminUsername, setFormAdminUsername] = useState('');
+  const [formAdminPassword, setFormAdminPassword] = useState('');
 
   const filteredSchools = schools.filter(
     (s) =>
@@ -88,22 +90,26 @@ export const SuperAdminView: React.FC = () => {
     }
 
     open2FAModal(() => {
-      addSchool({
-        name: formName,
-        npsn: formNpsn,
-        status: 'aktif',
-        packageType: formPackage,
-        expiredDate: formExpiry,
-        studentCount: 350,
-        teacherCount: 28,
-        latitude: -6.2,
-        longitude: 106.8,
-        geofenceRadiusMeters: formRadius,
-        address: formAddress || 'Jl. Pendidikan Nasional',
-        accreditation: 'A',
-        contactEmail: formEmail || `admin@${formNpsn}.sch.id`,
-        headmasterName: formHeadmaster || 'Kepala Sekolah',
-      });
+      addSchool(
+        {
+          name: formName,
+          npsn: formNpsn,
+          status: 'aktif',
+          packageType: formPackage,
+          expiredDate: formExpiry,
+          studentCount: 350,
+          teacherCount: 28,
+          latitude: -6.2,
+          longitude: 106.8,
+          geofenceRadiusMeters: formRadius,
+          address: formAddress || 'Jl. Pendidikan Nasional',
+          accreditation: 'A',
+          contactEmail: formEmail || `admin@${formNpsn}.sch.id`,
+          headmasterName: formHeadmaster || 'Kepala Sekolah',
+        },
+        formAdminUsername.trim() || undefined,
+        formAdminPassword || undefined
+      );
       setShowAddModal(false);
       // Reset form
       setFormName('');
@@ -111,6 +117,8 @@ export const SuperAdminView: React.FC = () => {
       setFormHeadmaster('');
       setFormEmail('');
       setFormAddress('');
+      setFormAdminUsername('');
+      setFormAdminPassword('');
     }, 'Otorisasi Pendaftaran Entitas Sekolah Baru (Super Admin)');
   };
 
@@ -437,6 +445,39 @@ export const SuperAdminView: React.FC = () => {
                   placeholder="Alamat lengkap lokasi sekolah..."
                   className="w-full px-3.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-purple-600 focus:outline-hidden"
                 />
+              </div>
+
+              {/* Admin Account Credentials Configuration */}
+              <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-2.5">
+                <p className="text-xs font-extrabold text-purple-900 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
+                  Akun Default Administrator Sekolah Ini
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Username Admin</label>
+                    <input
+                      type="text"
+                      value={formAdminUsername}
+                      onChange={(e) => setFormAdminUsername(e.target.value)}
+                      placeholder={`misal: admin.${formNpsn || 'sekolah'}`}
+                      className="w-full font-mono text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Kata Sandi Awal</label>
+                    <input
+                      type="text"
+                      value={formAdminPassword}
+                      onChange={(e) => setFormAdminPassword(e.target.value)}
+                      placeholder="Default: Admin_<NPSN>!"
+                      className="w-full font-mono text-xs px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg focus:border-purple-600 focus:outline-none"
+                    />
+                  </div>
+                </div>
+                <p className="text-[10px] text-purple-700">
+                  Admin sekolah dapat mengelola akun guru, siswa, orang tua, dan menyesuaikan tampilan sekolah mereka secara mandiri.
+                </p>
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex gap-2">

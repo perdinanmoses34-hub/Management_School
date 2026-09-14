@@ -11,7 +11,8 @@ export const translations = {
       kepala_sekolah: 'Kepala Sekolah',
       admin_sekolah: 'Admin Sekolah',
       guru: 'Guru Pengajar',
-      siswa: 'Siswa / Wali Murid',
+      siswa: 'Siswa',
+      orang_tua: 'Orang Tua / Wali Siswa',
     },
     nav: {
       beranda: 'Beranda Sekolah',
@@ -21,6 +22,10 @@ export const translations = {
       dukcapil: 'Sinkronisasi Dukcapil',
       analitik: 'Dashboard Analitik',
       superAdmin: 'Kelola Multi-Sekolah',
+      pengguna: 'Kelola Akun & Pengguna',
+      chat: 'Chat Realtime',
+      tampilan: 'Kustomisasi Tampilan',
+      cloudBackup: 'Penyimpanan Google Drive',
       keamanan: 'Enkripsi & Keamanan',
     },
     network: {
@@ -146,7 +151,8 @@ export const translations = {
       kepala_sekolah: 'Principal / Headmaster',
       admin_sekolah: 'School Administrator',
       guru: 'Teacher',
-      siswa: 'Student / Parent',
+      siswa: 'Student',
+      orang_tua: 'Parent / Guardian',
     },
     nav: {
       beranda: 'School Home',
@@ -156,6 +162,10 @@ export const translations = {
       dukcapil: 'National ID (Dukcapil)',
       analitik: 'Analytics Dashboard',
       superAdmin: 'Multi-School Manager',
+      pengguna: 'User & Account Manager',
+      chat: 'Realtime Chat',
+      tampilan: 'Theme Customization',
+      cloudBackup: 'Google Drive Storage',
       keamanan: 'Security & Encryption',
     },
     network: {

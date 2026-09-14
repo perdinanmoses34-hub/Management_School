@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "School": {
+      "title": "School",
+      "description": "School institution entity in multi-tenant system",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "npsn": { "type": "string" },
+        "status": { "type": "string", "enum": ["aktif", "nonaktif", "kadaluarsa"] },
+        "packageType": { "type": "string", "enum": ["Enterprise", "Pro", "Standard"] },
+        "expiredDate": { "type": "string" },
+        "headmasterName": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "address": { "type": "string" },
+        "geofenceRadiusMeters": { "type": "number" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" }
+      },
+      "required": ["id", "name", "npsn", "status"]
+    },
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "User authentication and profile entity",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["super_admin", "admin_sekolah", "kepala_sekolah", "guru", "siswa", "orang_tua"] },
+        "schoolId": { "type": "string" },
+        "nipOrNisn": { "type": "string" },
+        "phone": { "type": "string" }
+      },
+      "required": ["id", "username", "name", "role"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Real-time communication message",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "channelId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderRole": { "type": "string" },
+        "senderAvatar": { "type": "string" },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["id", "channelId", "senderId", "senderName", "content", "createdAt"]
+    },
+    "AppearanceConfig": {
+      "title": "AppearanceConfig",
+      "description": "Customizable UI theme and whitelabel styling",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "primaryColor": { "type": "string" },
+        "appName": { "type": "string" },
+        "schoolName": { "type": "string" },
+        "schoolMotto": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "bannerUrl": { "type": "string" },
+        "navbarStyle": { "type": "string" },
+        "fontFamily": { "type": "string" },
+        "cardRadius": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "primaryColor", "appName"]
+    },
+    "GoogleDriveBackup": {
+      "title": "GoogleDriveBackup",
+      "description": "Database snapshot backup synced with Google Drive",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "accountEmail": { "type": "string" },
+        "fileName": { "type": "string" },
+        "fileSizeKb": { "type": "number" },
+        "timestamp": { "type": "string" },
+        "status": { "type": "string" },
+        "driveFolder": { "type": "string" }
+      },
+      "required": ["id", "accountEmail", "fileName", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/schools/{schoolId}": {
+      "schema": { "$ref": "School" },
+      "description": "School entity document"
+    },
+    "/schools/{schoolId}/chats/{messageId}": {
+      "schema": { "$ref": "ChatMessage" },
+      "description": "School real-time messages"
+    },
+    "/schools/{schoolId}/config/appearance": {
+      "schema": { "$ref": "AppearanceConfig" },
+      "description": "School UI customization"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "UserAccount" },
+      "description": "User profile directory"
+    },
+    "/backups/{backupId}": {
+      "schema": { "$ref": "GoogleDriveBackup" },
+      "description": "Google Drive cloud backup logs"
+    }
+  }
+}

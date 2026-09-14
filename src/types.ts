@@ -1,9 +1,11 @@
-export type Role = 'super_admin' | 'kepala_sekolah' | 'admin_sekolah' | 'guru' | 'siswa';
+export type Role = 'super_admin' | 'kepala_sekolah' | 'admin_sekolah' | 'guru' | 'siswa' | 'orang_tua';
 
 export type Language = 'id' | 'en';
 
 export interface UserAccount {
   id: string;
+  username: string;
+  password?: string;
   name: string;
   email: string;
   role: Role;
@@ -11,8 +13,61 @@ export interface UserAccount {
   nipOrNisn: string;
   phone: string;
   schoolId: string;
+  schoolName?: string;
+  studentNisn?: string; // For orang tua linking to their child
   is2FAEnabled: boolean;
   lastLogin: string;
+  status: 'aktif' | 'nonaktif' | 'menunggu_verifikasi';
+}
+
+export interface AppearanceConfig {
+  id: string;
+  schoolId: string;
+  appName: string;
+  schoolName: string;
+  schoolMotto: string;
+  logoUrl: string;
+  bannerUrl: string;
+  colorPalette: 'emerald' | 'blue' | 'indigo' | 'purple' | 'rose' | 'amber' | 'slate' | 'teal';
+  primaryHex: string;
+  accentHex: string;
+  navbarStyle: 'gradient' | 'solid' | 'clean' | 'glass';
+  fontFamily: 'font-sans' | 'font-serif' | 'font-mono';
+  cardRadius: 'rounded-xl' | 'rounded-2xl' | 'rounded-3xl';
+  headerAnnouncement: string;
+  showSchoolBadge: boolean;
+  updatedAt: string;
+  updatedBy: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  channelId: string; // 'global' | 'guru' | 'ortu' | 'siswa' | 'superadmin'
+  schoolId: string;
+  senderId: string;
+  senderUsername: string;
+  senderName: string;
+  senderRole: Role;
+  senderAvatar: string;
+  content: string;
+  timestamp: string;
+  createdAt: number;
+  reactions?: Record<string, string[]>; // e.g. { '👍': ['tn.timbu', 'budi'] }
+  attachmentUrl?: string;
+}
+
+export interface GoogleDriveBackupRecord {
+  id: string;
+  accountEmail: string;
+  fileName: string;
+  fileSizeKb: number;
+  timestamp: string;
+  totalSchools: number;
+  totalUsers: number;
+  totalChats: number;
+  status: 'sukses' | 'proses' | 'gagal';
+  googleDrivePath: string;
+  downloadUrl?: string;
 }
 
 export interface SchoolEntity {

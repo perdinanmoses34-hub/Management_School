@@ -5,6 +5,7 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 import { NotificationModal } from './components/NotificationModal';
 import { SecurityCenterModal } from './components/SecurityCenterModal';
 import { TwoFactorModal } from './components/TwoFactorModal';
+import { AuthModal } from './components/AuthModal';
 
 import { SchoolPublicHomeView } from './components/views/SchoolPublicHomeView';
 import { AcademicManagementView } from './components/views/AcademicManagementView';
@@ -13,7 +14,11 @@ import { PaymentSPPView } from './components/views/PaymentSPPView';
 import { DukcapilSyncView } from './components/views/DukcapilSyncView';
 import { PrincipalAnalyticsView } from './components/views/PrincipalAnalyticsView';
 import { SuperAdminView } from './components/views/SuperAdminView';
-import { ShieldCheck, Wifi, WifiOff, RefreshCw } from 'lucide-react';
+import { RealtimeChatView } from './components/views/RealtimeChatView';
+import { ThemeCustomizerView } from './components/views/ThemeCustomizerView';
+import { UserManagementView } from './components/views/UserManagementView';
+import { GoogleDriveBackupView } from './components/views/GoogleDriveBackupView';
+import { ShieldCheck, WifiOff, RefreshCw } from 'lucide-react';
 
 const MainAppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('beranda');
@@ -23,11 +28,13 @@ const MainAppContent: React.FC = () => {
     offlineQueue,
     syncOfflineQueue,
     isSyncing,
-    currentRole,
+    appearance,
   } = useApp();
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 antialiased selection:bg-blue-600 selection:text-white pb-16 lg:pb-0">
+    <div
+      className={`min-h-screen bg-slate-50 flex flex-col ${appearance.fontFamily || 'font-sans'} text-slate-900 antialiased selection:bg-blue-600 selection:text-white pb-16 lg:pb-0`}
+    >
       {/* Top Navbar */}
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -39,8 +46,8 @@ const MainAppContent: React.FC = () => {
               <WifiOff className="w-4 h-4 animate-pulse" />
               <span>
                 {!isOnline
-                  ? `Mode Offline Aktif — Anda tetap dapat mencatat absensi dan nilai (${offlineQueue.length} data dalam antrean)`
-                  : `${offlineQueue.length} transaksi tertunda menunggu sinkronisasi cloud`}
+                  ? `Mode Offline Aktif — Anda tetap dapat mencatat absensi dan nilai (${offlineQueue.length} data dalam antrean lokal)`
+                  : `${offlineQueue.length} transaksi lokal tertunda menunggu sinkronisasi cloud Firebase`}
               </span>
             </div>
             {isOnline && offlineQueue.length > 0 && (
@@ -63,8 +70,12 @@ const MainAppContent: React.FC = () => {
         {activeTab === 'akademik' && <AcademicManagementView />}
         {activeTab === 'absensi' && <AttendanceBiometricView />}
         {activeTab === 'spp' && <PaymentSPPView />}
+        {activeTab === 'chat' && <RealtimeChatView />}
         {activeTab === 'dukcapil' && <DukcapilSyncView />}
         {activeTab === 'analitik' && <PrincipalAnalyticsView />}
+        {activeTab === 'pengguna' && <UserManagementView />}
+        {activeTab === 'tampilan' && <ThemeCustomizerView />}
+        {activeTab === 'cloudBackup' && <GoogleDriveBackupView />}
         {activeTab === 'superAdmin' && <SuperAdminView />}
       </main>
 
@@ -73,15 +84,22 @@ const MainAppContent: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
-                BM
+              <div
+                className="w-9 h-9 rounded-xl text-white flex items-center justify-center font-bold text-xs shadow-xs"
+                style={{ backgroundColor: appearance.primaryHex }}
+              >
+                {appearance.logoUrl ? (
+                  <img src={appearance.logoUrl} alt="Logo" className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  'SIA'
+                )}
               </div>
               <div>
-                <p className="font-bold text-slate-800 text-sm">
-                  {activeSchool.name} • NPSN {activeSchool.npsn}
+                <p className="font-extrabold text-slate-900 text-sm">
+                  {appearance.schoolName || activeSchool.name} • NPSN {activeSchool.npsn}
                 </p>
                 <p className="text-[11px] text-slate-500">
-                  {activeSchool.address} • Akreditasi {activeSchool.accreditation} (Unggul)
+                  {activeSchool.address} • Akreditasi {activeSchool.accreditation} (Terintegrasi Cloud & Google Drive)
                 </p>
               </div>
             </div>
@@ -89,10 +107,10 @@ const MainAppContent: React.FC = () => {
             <div className="flex flex-wrap items-center gap-4 text-[11px]">
               <span className="flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Enkripsi E2EE AES-256 & SHA-256 Aktif</span>
+                <span>Enkripsi E2EE AES-256 & SHA-256 Cloud Aktif</span>
               </span>
               <span>Terintegrasi API Kemendikbud & Dukcapil Kemendagri</span>
-              <span>© {new Date().getFullYear()} SIAKAD Terpadu</span>
+              <span>© {new Date().getFullYear()} {appearance.appName}</span>
             </div>
           </div>
         </div>
@@ -102,6 +120,7 @@ const MainAppContent: React.FC = () => {
       <NotificationModal />
       <SecurityCenterModal />
       <TwoFactorModal />
+      <AuthModal />
 
       {/* Mobile Bottom Navigation Bar (Android & iOS Responsive) */}
       <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
