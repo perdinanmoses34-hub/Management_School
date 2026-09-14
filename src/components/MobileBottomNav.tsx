@@ -27,8 +27,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
   ];
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200/90 shadow-lg px-2 py-1.5 safe-area-pb">
-      <div className="flex items-center justify-around">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200/90 shadow-lg px-2 py-1.5 safe-area-pb w-full max-w-full overflow-hidden">
+      <div className="flex items-center justify-around w-full">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -37,7 +37,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
               key={item.id}
               id={`bottom-nav-${item.id}`}
               onClick={() => setActiveTab(item.id)}
-              className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition cursor-pointer min-w-[56px] relative"
+              className="flex flex-col items-center justify-center py-1 px-1 sm:px-2 rounded-xl transition cursor-pointer flex-1 max-w-[76px] min-w-0 relative"
               style={isActive ? { color: appearance.primaryHex } : { color: '#64748b' }}
             >
               <div
@@ -49,7 +49,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
                   <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
                 )}
               </div>
-              <span className={`text-[10px] mt-0.5 tracking-tight ${isActive ? 'font-bold' : 'font-medium'}`}>
+              <span className={`text-[10px] mt-0.5 tracking-tight truncate w-full text-center ${isActive ? 'font-bold' : 'font-medium'}`}>
                 {item.label}
               </span>
             </button>

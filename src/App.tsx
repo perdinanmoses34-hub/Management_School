@@ -36,20 +36,20 @@ const MainAppContent: React.FC = () => {
 
   return (
     <div
-      className={`min-h-screen bg-slate-50 flex flex-col ${appearance.fontFamily || 'font-sans'} text-slate-900 antialiased selection:bg-blue-600 selection:text-white pb-16 lg:pb-0`}
+      className={`min-h-screen bg-slate-50 flex flex-col ${appearance.fontFamily || 'font-sans'} text-slate-900 antialiased selection:bg-blue-600 selection:text-white pb-16 lg:pb-0 w-full max-w-full overflow-x-hidden`}
     >
       {/* Top Navbar */}
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Offline Alert Sticky Banner if offline or queue pending */}
       {(!isOnline || offlineQueue.length > 0) && (
-        <div className="bg-amber-500 text-slate-950 px-4 py-2 border-b border-amber-600 text-xs font-bold flex items-center justify-between shadow-xs sticky top-16 sm:top-18 z-30">
-          <div className="flex items-center gap-2 max-w-7xl mx-auto w-full justify-between">
-            <div className="flex items-center gap-2">
-              <WifiOff className="w-4 h-4 animate-pulse" />
-              <span>
+        <div className="bg-amber-500 text-slate-950 px-3 sm:px-4 py-2 border-b border-amber-600 text-xs font-bold shadow-xs sticky top-16 sm:top-18 z-30 w-full overflow-hidden">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 max-w-7xl mx-auto w-full justify-between">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <WifiOff className="w-4 h-4 shrink-0 animate-pulse" />
+              <span className="break-words leading-tight">
                 {!isOnline
-                  ? `Mode Offline Aktif — Anda tetap dapat mencatat absensi dan nilai (${offlineQueue.length} data dalam antrean lokal)`
+                  ? `Mode Offline Aktif — Absensi & nilai tersimpan lokal (${offlineQueue.length} antrean)`
                   : `${offlineQueue.length} transaksi lokal tertunda menunggu sinkronisasi cloud Firebase`}
               </span>
             </div>
@@ -57,7 +57,7 @@ const MainAppContent: React.FC = () => {
               <button
                 onClick={syncOfflineQueue}
                 disabled={isSyncing}
-                className="px-3 py-1 bg-slate-950 hover:bg-slate-900 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                className="px-3 py-1 bg-slate-950 hover:bg-slate-900 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 self-end sm:self-auto"
               >
                 <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
                 <span>{isSyncing ? 'Menyinkronkan...' : 'Sinkronkan Sekarang'}</span>
@@ -68,7 +68,7 @@ const MainAppContent: React.FC = () => {
       )}
 
       {/* Main Content View Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 overflow-x-hidden">
         {activeTab === 'beranda' && <SchoolPublicHomeView setActiveTab={setActiveTab} />}
         {activeTab === 'akademik' && <AcademicManagementView />}
         {activeTab === 'absensi' && <AttendanceBiometricView />}
@@ -83,12 +83,12 @@ const MainAppContent: React.FC = () => {
       </main>
 
       {/* Official Indonesian Education System Footer */}
-      <footer className="bg-white border-t border-slate-200 mt-auto py-8">
+      <footer className="bg-white border-t border-slate-200 mt-auto py-8 w-full overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 min-w-0 max-w-full">
               <div
-                className="w-9 h-9 rounded-xl text-white flex items-center justify-center font-bold text-xs shadow-xs"
+                className="w-9 h-9 rounded-xl text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0"
                 style={{ backgroundColor: appearance.primaryHex }}
               >
                 {appearance.logoUrl ? (
@@ -97,22 +97,22 @@ const MainAppContent: React.FC = () => {
                   'SIA'
                 )}
               </div>
-              <div>
-                <p className="font-extrabold text-slate-900 text-sm">
+              <div className="min-w-0">
+                <p className="font-extrabold text-slate-900 text-sm truncate">
                   {appearance.schoolName || activeSchool.name} • NPSN {activeSchool.npsn}
                 </p>
-                <p className="text-[11px] text-slate-500">
-                  {activeSchool.address} • Akreditasi {activeSchool.accreditation} (Terintegrasi Cloud & Google Drive)
+                <p className="text-[11px] text-slate-500 truncate">
+                  {activeSchool.address} • Akreditasi {activeSchool.accreditation}
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-[11px]">
+            <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 sm:gap-4 text-[11px] max-w-full">
               <span className="flex items-center gap-1 text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Enkripsi E2EE AES-256 & SHA-256 Cloud Aktif</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span className="break-words">Enkripsi E2EE AES-256 Aktif</span>
               </span>
-              <span>Terintegrasi API Kemendikbud & Dukcapil Kemendagri</span>
+              <span className="text-center">API Kemendikbud & Dukcapil</span>
               <span>© {new Date().getFullYear()} {appearance.appName}</span>
               <button
                 onClick={() => setIsAuthModalOpen(true)}

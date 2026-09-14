@@ -469,26 +469,28 @@ export const AcademicManagementView: React.FC = () => {
               </div>
 
               {/* Grades Table Mini */}
-              <table className="w-full text-left text-xs mb-4 border border-slate-300">
-                <thead className="bg-slate-200 text-slate-800 font-bold">
-                  <tr>
-                    <th className="p-2 border border-slate-300">Mata Pelajaran</th>
-                    <th className="p-2 border border-slate-300 text-center">Nilai</th>
-                    <th className="p-2 border border-slate-300 text-center">Predikat</th>
-                    <th className="p-2 border border-slate-300">Capaian Kompetensi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {grades.map((g) => (
-                    <tr key={g.subjectId} className="border border-slate-300">
-                      <td className="p-2 border border-slate-300 font-semibold">{g.subjectName}</td>
-                      <td className="p-2 border border-slate-300 text-center font-bold font-mono">{g.finalScore}</td>
-                      <td className="p-2 border border-slate-300 text-center font-bold">{g.gradeLetter}</td>
-                      <td className="p-2 border border-slate-300 text-[11px] text-slate-600">{g.predicate}</td>
+              <div className="overflow-x-auto w-full max-w-full my-4">
+                <table className="w-full text-left text-xs border border-slate-300 min-w-[340px]">
+                  <thead className="bg-slate-200 text-slate-800 font-bold">
+                    <tr>
+                      <th className="p-2 border border-slate-300">Mata Pelajaran</th>
+                      <th className="p-2 border border-slate-300 text-center">Nilai</th>
+                      <th className="p-2 border border-slate-300 text-center">Predikat</th>
+                      <th className="p-2 border border-slate-300">Capaian Kompetensi</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {grades.map((g) => (
+                      <tr key={g.subjectId} className="border border-slate-300">
+                        <td className="p-2 border border-slate-300 font-semibold">{g.subjectName}</td>
+                        <td className="p-2 border border-slate-300 text-center font-bold font-mono">{g.finalScore}</td>
+                        <td className="p-2 border border-slate-300 text-center font-bold">{g.gradeLetter}</td>
+                        <td className="p-2 border border-slate-300 text-[11px] text-slate-600">{g.predicate}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               {/* Footer Signatures with QR verification code */}
               <div className="flex items-center justify-between mt-6 text-xs text-slate-700 pt-3 border-t border-slate-200">

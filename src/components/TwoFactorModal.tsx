@@ -125,7 +125,7 @@ export const TwoFactorModal: React.FC = () => {
         </div>
 
         {/* 6 Digit Input boxes */}
-        <div className="flex justify-center gap-2.5 mb-5">
+        <div className="flex justify-center gap-1.5 sm:gap-2.5 mb-5 w-full max-w-full overflow-hidden">
           {code.map((digit, idx) => (
             <input
               key={idx}
@@ -136,7 +136,7 @@ export const TwoFactorModal: React.FC = () => {
               value={digit}
               onChange={(e) => handleInputChange(idx, e.target.value)}
               onKeyDown={(e) => handleKeyDown(idx, e)}
-              className="w-11 h-13 text-center text-xl font-bold font-mono text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-hidden transition"
+              className="w-9 h-11 sm:w-11 sm:h-13 text-center text-lg sm:text-xl font-bold font-mono text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-hidden transition"
             />
           ))}
         </div>

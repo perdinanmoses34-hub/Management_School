@@ -114,39 +114,39 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6">
-        <div className="flex items-center justify-between h-16 sm:h-18 gap-2">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 w-full">
+        <div className="flex items-center justify-between h-16 sm:h-18 gap-2 w-full">
           {/* School Brand Identity */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 sm:flex-initial">
             <button
               onClick={() => setActiveTab('beranda')}
-              className="flex items-center gap-2.5 text-left group cursor-pointer"
+              className="flex items-center gap-2 sm:gap-2.5 text-left group cursor-pointer min-w-0"
             >
               <div
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl text-white flex items-center justify-center shadow-md group-hover:scale-105 transition overflow-hidden"
+                className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl text-white flex items-center justify-center shadow-md group-hover:scale-105 transition overflow-hidden shrink-0"
                 style={{ backgroundColor: appearance.primaryHex }}
               >
                 {appearance.logoUrl ? (
                   <img src={appearance.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                 ) : (
-                  <GraduationCap className="w-6 h-6" />
+                  <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
               </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-slate-900 text-base sm:text-lg leading-tight tracking-tight">
+              <div className="flex flex-col min-w-0">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="font-extrabold text-slate-900 text-sm sm:text-lg leading-tight tracking-tight truncate max-w-[130px] xs:max-w-[190px] sm:max-w-none">
                     {appearance.appName || activeSchool.name}
                   </span>
                   {appearance.showSchoolBadge && (
                     <span
-                      className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold text-white shadow-xs"
+                      className="hidden md:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold text-white shadow-xs shrink-0"
                       style={{ backgroundColor: appearance.accentHex }}
                     >
                       Akred. {activeSchool.accreditation}
                     </span>
                   )}
                 </div>
-                <span className="text-[11px] text-slate-500 font-medium hidden xs:block truncate max-w-[280px]">
+                <span className="text-[11px] text-slate-500 font-medium hidden xs:block truncate max-w-[180px] sm:max-w-[280px]">
                   {appearance.schoolMotto || 'SIAKAD Terpadu & Terenkripsi E2EE'}
                 </span>
               </div>
@@ -208,16 +208,16 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           </nav>
 
           {/* Right Action Tools */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             {/* School Registration Link Trigger */}
             <button
               id="btn-register-school"
               onClick={() => setIsRegisterModalOpen(true)}
               title="Daftarkan Sekolah & Akun Admin Baru"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition shadow-xs cursor-pointer"
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition shadow-xs cursor-pointer"
             >
               <School className="w-3.5 h-3.5 text-blue-600" />
-              <span className="hidden sm:inline">Daftar Sekolah</span>
+              <span>Daftar Sekolah</span>
             </button>
 
             {/* Quick Login with Credentials Modal Trigger */}
@@ -225,10 +225,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               id="btn-login-credentials"
               onClick={() => setIsAuthModalOpen(true)}
               title="Masuk ke Akun SIAKAD"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold transition shadow-xs cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold transition shadow-xs cursor-pointer"
             >
               <KeyRound className="w-3.5 h-3.5 text-amber-600" />
-              <span className="hidden md:inline">Masuk Akun</span>
+              <span>Masuk Akun</span>
             </button>
 
             {/* Online / Offline Simulator Toggle */}
@@ -240,7 +240,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   ? 'Koneksi Cloud Online (Klik untuk simulasikan mode offline)'
                   : 'Mode Offline Aktif (Klik untuk menyambungkan kembali)'
               }
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition border cursor-pointer ${
+              className={`flex items-center gap-1 px-2 py-1.5 rounded-xl text-xs font-semibold transition border cursor-pointer ${
                 isOnline
                   ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
                   : 'bg-amber-50 text-amber-700 border-amber-300 hover:bg-amber-100 animate-pulse'
@@ -249,12 +249,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               {isOnline ? (
                 <>
                   <Wifi className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="hidden sm:inline">Online</span>
+                  <span className="hidden md:inline">Online</span>
                 </>
               ) : (
                 <>
                   <WifiOff className="w-3.5 h-3.5 text-amber-600" />
-                  <span className="hidden sm:inline">Offline ({offlineQueue.length})</span>
+                  <span className="hidden md:inline">Offline</span>
                 </>
               )}
             </button>
@@ -263,7 +263,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <button
               id="btn-switch-language"
               onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
-              className="flex items-center gap-1 px-2 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
+              className="hidden sm:flex items-center gap-1 px-2 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
               title="Ganti Bahasa (ID / EN)"
             >
               <Globe className="w-3.5 h-3.5 text-blue-600" />
@@ -274,7 +274,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <button
               id="btn-open-security-center"
               onClick={() => setIsSecurityModalOpen(true)}
-              className="p-2 rounded-xl text-slate-700 hover:text-purple-700 hover:bg-purple-50 border border-slate-200 transition relative cursor-pointer"
+              className="hidden sm:flex p-2 rounded-xl text-slate-700 hover:text-purple-700 hover:bg-purple-50 border border-slate-200 transition relative cursor-pointer"
               title="Pusat Keamanan & Enkripsi E2EE"
             >
               <Shield className="w-4 h-4 text-purple-600" />
@@ -285,7 +285,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <button
               id="btn-open-notification"
               onClick={() => setIsNotifModalOpen(true)}
-              className="p-2 rounded-xl text-slate-700 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 transition relative cursor-pointer"
+              className="p-2 rounded-xl text-slate-700 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 transition relative cursor-pointer shrink-0"
               title="Notifikasi Sistem"
             >
               <Bell className="w-4 h-4 text-slate-700" />
@@ -301,20 +301,20 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               <button
                 id="btn-role-dropdown"
                 onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+                className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
               >
                 <div className="w-5 h-5 rounded-full overflow-hidden bg-slate-700 shrink-0 border border-slate-600">
                   <img src={currentUser.avatar} alt="Avatar" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex flex-col text-left leading-tight hidden xs:block">
                   <span className="text-[9px] text-slate-300 font-normal uppercase">{t.currentRole}</span>
-                  <span className="font-bold truncate max-w-[90px] sm:max-w-[120px]">{t.roles[currentRole]}</span>
+                  <span className="font-bold truncate max-w-[80px] sm:max-w-[120px]">{t.roles[currentRole]}</span>
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-300 ml-0.5" />
+                <ChevronDown className="w-3.5 h-3.5 text-slate-300 shrink-0" />
               </button>
 
               {isRoleDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute right-0 mt-2 w-72 max-w-[calc(100vw-1.5rem)] bg-white rounded-2xl shadow-xl border border-slate-200 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   <div className="px-3 py-2 border-b border-slate-100 mb-1">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                       {t.switchRole} (Simulasi Peran Aktif)
@@ -349,7 +349,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <button
               id="btn-mobile-menu"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 xl:hidden rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 cursor-pointer"
+              className="p-2 xl:hidden rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 cursor-pointer shrink-0"
+              aria-label="Toggle navigation menu"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -358,29 +359,75 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
 
         {/* Mobile Dropdown Menu */}
         {isMobileMenuOpen && (
-          <div className="xl:hidden py-3 border-t border-slate-200/80 space-y-1 animate-in slide-in-from-top duration-200">
-            {visibleNavItems.map((m) => (
+          <div className="xl:hidden py-3 border-t border-slate-200/80 space-y-2 animate-in slide-in-from-top duration-200">
+            {/* Quick Action Tools inside Drawer for Mobile */}
+            <div className="grid grid-cols-2 gap-2 pb-2 border-b border-slate-100">
               <button
-                key={m.id}
                 onClick={() => {
-                  setActiveTab(m.id);
+                  setIsAuthModalOpen(true);
                   setIsMobileMenuOpen(false);
                 }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center justify-between ${
-                  activeTab === m.id
-                    ? 'text-white font-bold'
-                    : 'text-slate-600 hover:bg-slate-50'
-                }`}
-                style={activeTab === m.id ? { backgroundColor: appearance.primaryHex } : {}}
+                className="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition"
               >
-                <span>{m.label}</span>
-                {m.badge !== undefined && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-800 font-bold">
-                    {m.badge}
-                  </span>
-                )}
+                <KeyRound className="w-3.5 h-3.5 text-amber-600" />
+                <span>Masuk Akun</span>
               </button>
-            ))}
+              <button
+                onClick={() => {
+                  setIsRegisterModalOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold transition"
+              >
+                <School className="w-3.5 h-3.5 text-blue-600" />
+                <span>Daftar Sekolah</span>
+              </button>
+              <button
+                onClick={() => {
+                  setIsSecurityModalOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold transition"
+              >
+                <Shield className="w-3.5 h-3.5 text-purple-600" />
+                <span>Pusat Keamanan</span>
+              </button>
+              <button
+                onClick={() => {
+                  setLanguage(language === 'id' ? 'en' : 'id');
+                }}
+                className="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition"
+              >
+                <Globe className="w-3.5 h-3.5 text-blue-600" />
+                <span>Bahasa: {language.toUpperCase()}</span>
+              </button>
+            </div>
+
+            {/* Navigation Tabs */}
+            <div className="space-y-1 max-h-[60vh] overflow-y-auto">
+              {visibleNavItems.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => {
+                    setActiveTab(m.id);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center justify-between ${
+                    activeTab === m.id
+                      ? 'text-white font-bold'
+                      : 'text-slate-600 hover:bg-slate-50'
+                  }`}
+                  style={activeTab === m.id ? { backgroundColor: appearance.primaryHex } : {}}
+                >
+                  <span>{m.label}</span>
+                  {m.badge !== undefined && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-800 font-bold">
+                      {m.badge}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
