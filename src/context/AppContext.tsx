@@ -829,13 +829,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     await appendAuditLog(
       'GOOGLE_DRIVE_BACKUP_SUCCESS',
-      `Google Drive (${connectedDriveAccount})`,
+      'Google Drive (Akun Terenkripsi & Disembunyikan)',
       `Database snapshot ${fileName} (${sizeKb} KB) tersimpan di Google Drive.`
     );
 
     addNotification({
       title: 'Pencadangan Google Drive Berhasil',
-      message: `Snapshot database ${fileName} berhasil diunggah ke Google Drive (${connectedDriveAccount}).`,
+      message: `Snapshot database ${fileName} berhasil diunggah ke Google Drive (Akun Terhubung Disembunyikan).`,
       category: 'sistem',
     });
 

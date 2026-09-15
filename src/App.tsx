@@ -41,9 +41,9 @@ const MainAppContent: React.FC = () => {
       {/* Top Navbar */}
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* Offline Alert Sticky Banner if offline or queue pending */}
+      {/* Offline Alert Banner if offline or queue pending */}
       {(!isOnline || offlineQueue.length > 0) && (
-        <div className="bg-amber-500 text-slate-950 px-3 sm:px-4 py-2 border-b border-amber-600 text-xs font-bold shadow-xs sticky top-16 sm:top-18 z-30 w-full overflow-hidden">
+        <div className="bg-amber-500 text-slate-950 px-3 sm:px-4 py-2 border-b border-amber-600 text-xs font-bold shadow-xs relative z-30 w-full overflow-hidden">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 max-w-7xl mx-auto w-full justify-between">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <WifiOff className="w-4 h-4 shrink-0 animate-pulse" />

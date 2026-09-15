@@ -147,20 +147,15 @@ export const GoogleDriveBackupView: React.FC = () => {
           <div>
             <div className="flex items-center justify-between gap-2">
               <p className="font-mono text-xs font-extrabold text-slate-900 truncate">
-                {showFullEmail ? connectedDriveAccount : maskEmail(connectedDriveAccount)}
+                ••••••••••••••••••••••@belajar.id
               </p>
-              <button
-                type="button"
-                onClick={() => setShowFullEmail(!showFullEmail)}
-                title={showFullEmail ? 'Sembunyikan alamat akun' : 'Lihat akun'}
-                className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
-              >
-                {showFullEmail ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-              </button>
+              <span className="p-1 rounded-md text-emerald-600 bg-emerald-50 text-[10px] font-bold" title="Akun Terverifikasi & Disembunyikan">
+                Tersambung
+              </span>
             </div>
             <div className="flex items-center gap-1.5 mt-1">
               <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <Lock className="w-2.5 h-2.5" /> Akun Terlindungi & Disembunyikan
+                <Lock className="w-2.5 h-2.5" /> Akun Google Drive Terlindungi & Disembunyikan
               </span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1">
@@ -371,7 +366,7 @@ export const GoogleDriveBackupView: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-5 py-4 font-mono text-[11px] text-slate-600">
-                    {showFullEmail ? bak.accountEmail : maskEmail(bak.accountEmail)}
+                    ••••••••••••••••••••••@belajar.id
                   </td>
                   <td className="px-5 py-4 font-mono font-bold text-slate-700">
                     {bak.fileSizeKb} KB

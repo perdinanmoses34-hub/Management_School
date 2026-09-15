@@ -106,24 +106,24 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
       {/* Top Header Announcement Ticker (from Theme Customizer) */}
       {appearance.headerAnnouncement && (
         <div
-          className="text-white text-[11px] font-bold py-1 px-3 text-center transition flex items-center justify-center gap-2"
+          className="text-white text-[11px] font-semibold py-1 px-3 text-center transition flex items-center justify-center gap-2 overflow-hidden leading-snug"
           style={{ backgroundColor: appearance.primaryHex }}
         >
-          <span className="inline-block w-2 h-2 rounded-full bg-white animate-pulse"></span>
+          <span className="inline-block w-2 h-2 rounded-full bg-white shrink-0 animate-pulse"></span>
           <span className="truncate max-w-4xl">{appearance.headerAnnouncement}</span>
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 w-full">
-        <div className="flex items-center justify-between h-16 sm:h-18 gap-2 w-full">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-4 lg:px-6 w-full">
+        <div className="flex items-center justify-between h-16 sm:h-18 gap-2 sm:gap-3 w-full">
           {/* School Brand Identity */}
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 sm:flex-initial">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink sm:shrink-0">
             <button
               onClick={() => setActiveTab('beranda')}
               className="flex items-center gap-2 sm:gap-2.5 text-left group cursor-pointer min-w-0"
             >
               <div
-                className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl text-white flex items-center justify-center shadow-md group-hover:scale-105 transition overflow-hidden shrink-0"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl text-white flex items-center justify-center shadow-md group-hover:scale-105 transition overflow-hidden shrink-0"
                 style={{ backgroundColor: appearance.primaryHex }}
               >
                 {appearance.logoUrl ? (
@@ -132,21 +132,21 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
               </div>
-              <div className="flex flex-col min-w-0">
+              <div className="flex flex-col justify-center min-w-0 py-0.5">
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="font-extrabold text-slate-900 text-sm sm:text-lg leading-tight tracking-tight truncate max-w-[130px] xs:max-w-[190px] sm:max-w-none">
+                  <span className="font-extrabold text-slate-900 text-sm sm:text-base lg:text-lg leading-snug tracking-tight truncate max-w-[135px] xs:max-w-[170px] sm:max-w-[200px] lg:max-w-[260px]">
                     {appearance.appName || activeSchool.name}
                   </span>
                   {appearance.showSchoolBadge && (
                     <span
-                      className="hidden md:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold text-white shadow-xs shrink-0"
+                      className="hidden lg:inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold text-white shadow-xs shrink-0 whitespace-nowrap"
                       style={{ backgroundColor: appearance.accentHex }}
                     >
                       Akred. {activeSchool.accreditation}
                     </span>
                   )}
                 </div>
-                <span className="text-[11px] text-slate-500 font-medium hidden xs:block truncate max-w-[180px] sm:max-w-[280px]">
+                <span className="text-[11px] text-slate-500 font-medium hidden sm:block truncate max-w-[180px] lg:max-w-[260px] leading-normal">
                   {appearance.schoolMotto || 'SIAKAD Terpadu & Terenkripsi E2EE'}
                 </span>
               </div>
@@ -154,15 +154,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden xl:flex items-center gap-1">
-            {visibleNavItems.slice(0, 7).map((item) => {
+          <nav className="hidden xl:flex items-center gap-1 shrink-0">
+            {visibleNavItems.slice(0, 5).map((item) => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   id={`nav-tab-${item.id}`}
                   onClick={() => setActiveTab(item.id)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                     isActive
                       ? 'text-white font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -183,38 +183,52 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               );
             })}
 
-            {/* Extra Menu items dropdown if many */}
-            {visibleNavItems.length > 7 && (
-              <div className="relative group">
-                <button className="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 flex items-center gap-1">
-                  <span>Lainnya</span>
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </button>
-                <div className="absolute right-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-slate-200 p-1.5 hidden group-hover:block z-50 animate-in fade-in duration-150">
-                  {visibleNavItems.slice(7).map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition ${
-                        activeTab === item.id ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-700 hover:bg-slate-50'
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
+            {/* Extra Menu items dropdown for remaining tabs */}
+            {visibleNavItems.length > 5 && (
+              <div className="relative group shrink-0">
+                {(() => {
+                  const hasActiveChild = visibleNavItems.slice(5).some((i) => i.id === activeTab);
+                  return (
+                    <>
+                      <button
+                        className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0 ${
+                          hasActiveChild
+                            ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200'
+                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                        }`}
+                      >
+                        <span>Menu Lainnya</span>
+                        <ChevronDown className="w-3.5 h-3.5" />
+                      </button>
+                      <div className="absolute right-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-slate-200 p-1.5 hidden group-hover:block z-50 animate-in fade-in duration-150">
+                        {visibleNavItems.slice(5).map((item) => (
+                          <button
+                            key={item.id}
+                            onClick={() => setActiveTab(item.id)}
+                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center justify-between whitespace-nowrap ${
+                              activeTab === item.id ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-700 hover:bg-slate-50'
+                            }`}
+                          >
+                            <span>{item.label}</span>
+                            {activeTab === item.id && <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             )}
           </nav>
 
           {/* Right Action Tools */}
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
             {/* School Registration Link Trigger */}
             <button
               id="btn-register-school"
               onClick={() => setIsRegisterModalOpen(true)}
               title="Daftarkan Sekolah & Akun Admin Baru"
-              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition shadow-xs cursor-pointer"
+              className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold transition shadow-xs cursor-pointer whitespace-nowrap shrink-0"
             >
               <School className="w-3.5 h-3.5 text-blue-600" />
               <span>Daftar Sekolah</span>
@@ -225,7 +239,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               id="btn-login-credentials"
               onClick={() => setIsAuthModalOpen(true)}
               title="Masuk ke Akun SIAKAD"
-              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold transition shadow-xs cursor-pointer"
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-bold transition shadow-xs cursor-pointer whitespace-nowrap shrink-0"
             >
               <KeyRound className="w-3.5 h-3.5 text-amber-600" />
               <span>Masuk Akun</span>
@@ -240,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   ? 'Koneksi Cloud Online (Klik untuk simulasikan mode offline)'
                   : 'Mode Offline Aktif (Klik untuk menyambungkan kembali)'
               }
-              className={`flex items-center gap-1 px-2 py-1.5 rounded-xl text-xs font-semibold transition border cursor-pointer ${
+              className={`flex items-center gap-1 px-2 py-1.5 rounded-xl text-xs font-semibold transition border cursor-pointer whitespace-nowrap shrink-0 ${
                 isOnline
                   ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
                   : 'bg-amber-50 text-amber-700 border-amber-300 hover:bg-amber-100 animate-pulse'
@@ -248,12 +262,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             >
               {isOnline ? (
                 <>
-                  <Wifi className="w-3.5 h-3.5 text-emerald-600" />
+                  <Wifi className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span className="hidden md:inline">Online</span>
                 </>
               ) : (
                 <>
-                  <WifiOff className="w-3.5 h-3.5 text-amber-600" />
+                  <WifiOff className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                   <span className="hidden md:inline">Offline</span>
                 </>
               )}
@@ -263,10 +277,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <button
               id="btn-switch-language"
               onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
-              className="hidden sm:flex items-center gap-1 px-2 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
+              className="hidden md:flex items-center gap-1 px-2 py-1.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 border border-slate-200 transition cursor-pointer whitespace-nowrap shrink-0"
               title="Ganti Bahasa (ID / EN)"
             >
-              <Globe className="w-3.5 h-3.5 text-blue-600" />
+              <Globe className="w-3.5 h-3.5 text-blue-600 shrink-0" />
               <span>{language.toUpperCase()}</span>
             </button>
 
@@ -274,11 +288,11 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             <button
               id="btn-open-security-center"
               onClick={() => setIsSecurityModalOpen(true)}
-              className="hidden sm:flex p-2 rounded-xl text-slate-700 hover:text-purple-700 hover:bg-purple-50 border border-slate-200 transition relative cursor-pointer"
+              className="hidden sm:flex p-2 rounded-xl text-slate-700 hover:text-purple-700 hover:bg-purple-50 border border-slate-200 transition relative cursor-pointer shrink-0"
               title="Pusat Keamanan & Enkripsi E2EE"
             >
-              <Shield className="w-4 h-4 text-purple-600" />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+              <Shield className="w-4 h-4 text-purple-600 shrink-0" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white"></span>
             </button>
 
             {/* Notification Bell with Badge */}
@@ -288,7 +302,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
               className="p-2 rounded-xl text-slate-700 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 transition relative cursor-pointer shrink-0"
               title="Notifikasi Sistem"
             >
-              <Bell className="w-4 h-4 text-slate-700" />
+              <Bell className="w-4 h-4 text-slate-700 shrink-0" />
               {unreadNotifsCount > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-rose-600 text-[10px] font-bold text-white flex items-center justify-center animate-bounce">
                   {unreadNotifsCount}
@@ -297,18 +311,22 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             </button>
 
             {/* Role Switcher Dropdown */}
-            <div className="relative">
+            <div className="relative shrink-0">
               <button
                 id="btn-role-dropdown"
                 onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition cursor-pointer"
+                className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition cursor-pointer shrink-0"
               >
                 <div className="w-5 h-5 rounded-full overflow-hidden bg-slate-700 shrink-0 border border-slate-600">
                   <img src={currentUser.avatar} alt="Avatar" className="w-full h-full object-cover" />
                 </div>
-                <div className="flex flex-col text-left leading-tight hidden xs:block">
-                  <span className="text-[9px] text-slate-300 font-normal uppercase">{t.currentRole}</span>
-                  <span className="font-bold truncate max-w-[80px] sm:max-w-[120px]">{t.roles[currentRole]}</span>
+                <div className="hidden sm:flex flex-col text-left justify-center min-w-0 max-w-[85px] md:max-w-[110px]">
+                  <span className="text-[8px] text-slate-400 font-bold uppercase tracking-wider leading-none truncate">
+                    {t.currentRole}
+                  </span>
+                  <span className="font-bold text-xs text-white leading-tight truncate mt-0.5">
+                    {t.roles[currentRole]}
+                  </span>
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-300 shrink-0" />
               </button>
