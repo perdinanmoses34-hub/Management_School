@@ -17,6 +17,7 @@ import {
   Lock,
   Palette,
   LayoutGrid,
+  School,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
@@ -25,7 +26,9 @@ interface Props {
 }
 
 export const SchoolPublicHomeView: React.FC<Props> = ({ setActiveTab }) => {
-  const { activeSchool, currentUser, currentRole, appearance } = useApp();
+  const { activeSchool, currentUser, currentRole, appearance, setIsRegisterModalOpen } = useApp();
+
+  const isSchoolConfigured = Boolean(appearance.schoolName && appearance.schoolName.trim() !== '');
 
   const cards = appearance.dashboardCards || {
     showQuickStats: true,
@@ -75,7 +78,9 @@ export const SchoolPublicHomeView: React.FC<Props> = ({ setActiveTab }) => {
           <div className="flex items-center gap-2 text-blue-950 font-medium">
             <LayoutGrid className="w-4 h-4 text-blue-600 shrink-0" />
             <span>
-              Mode Admin Aktif: Anda dapat mengkustomisasi tema, warna, dan susunan kartu dashboard sekolah ini.
+              {isSchoolConfigured
+                ? `Mode Admin Aktif (${appearance.schoolName}): Anda dapat mengkustomisasi nama sekolah, tema, warna, dan susunan dashboard.`
+                : 'Mode Admin Aktif: Anda dapat mendaftarkan dan mengedit identitas resmi sekolah Anda di menu Kustomisasi.'}
             </span>
           </div>
           <button
@@ -83,7 +88,7 @@ export const SchoolPublicHomeView: React.FC<Props> = ({ setActiveTab }) => {
             className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer shrink-0"
           >
             <Palette className="w-3.5 h-3.5" />
-            <span>Kustomisasi Tampilan Dashboard</span>
+            <span>Kustomisasi Identitas Sekolah</span>
           </button>
         </div>
       )}
@@ -95,26 +100,58 @@ export const SchoolPublicHomeView: React.FC<Props> = ({ setActiveTab }) => {
         <div className="relative p-6 sm:p-10 lg:p-12 max-w-4xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-semibold mb-4 backdrop-blur-xs">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Tahun Ajaran 2026/2027 • Kurikulum Merdeka Nasional</span>
+            <span>
+              {isSchoolConfigured
+                ? `Tahun Ajaran 2026/2027 • ${appearance.schoolName}`
+                : 'Platform Terintegrasi • Kurikulum Merdeka & Dapodik'}
+            </span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-            Selamat Datang di Portal Terpadu <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-sky-200 to-indigo-200">
-              {appearance.schoolName || activeSchool.name}
-            </span>
+            {isSchoolConfigured ? (
+              <>
+                SELAMAT DATANG DI <br className="hidden sm:inline" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-sky-200 to-indigo-200">
+                  {appearance.schoolName.toUpperCase()}
+                </span>
+              </>
+            ) : (
+              <>
+                SELAMAT DATANG DI <br className="hidden sm:inline" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-sky-200 to-indigo-200">
+                  PORTAL SIAKAD
+                </span>
+              </>
+            )}
           </h1>
 
           <p className="mt-3 sm:mt-4 text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
-            {appearance.schoolMotto ||
-              'Sistem Informasi Akademik Sekolah (SIAKAD) modern dengan manajemen nilai cloud, absensi biometrik & geofencing GPS, portal pembayaran SPP instan, sinkronisasi Dukcapil, serta perlindungan privasi enkripsi E2EE.'}
+            {isSchoolConfigured
+              ? appearance.schoolMotto ||
+                'Sistem Informasi Akademik Sekolah (SIAKAD) modern dengan manajemen nilai cloud, absensi biometrik & geofencing GPS, portal pembayaran SPP instan, sinkronisasi Dukcapil, serta perlindungan privasi enkripsi E2EE.'
+              : 'Platform Sistem Informasi Akademik Sekolah (SIAKAD) modern dan terpadu: absensi biometrik & geofencing GPS, portal pembayaran SPP online instan, manajemen nilai cloud, serta sinkronisasi data Dapodik & Dukcapil. Pihak sekolah dapat mendaftarkan akun dan mengelola identitas sekolah secara mandiri.'}
           </p>
 
           <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-3">
+            {!isSchoolConfigured && (
+              <button
+                id="btn-hero-register"
+                onClick={() => setIsRegisterModalOpen(true)}
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-600/30 transition flex items-center gap-2 cursor-pointer"
+              >
+                <School className="w-4 h-4" />
+                <span>Daftarkan Sekolah Baru</span>
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </button>
+            )}
             <button
               id="btn-hero-akademik"
               onClick={() => setActiveTab('akademik')}
-              className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-600/30 transition flex items-center gap-2 cursor-pointer"
+              className={`px-5 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-lg transition flex items-center gap-2 cursor-pointer ${
+                isSchoolConfigured
+                  ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30'
+                  : 'bg-white/15 hover:bg-white/25 text-white backdrop-blur-xs border border-white/20'
+              }`}
             >
               <BookOpen className="w-4 h-4" />
               <span>Buka Sistem Akademik</span>
@@ -142,24 +179,49 @@ export const SchoolPublicHomeView: React.FC<Props> = ({ setActiveTab }) => {
         {/* Floating School Identity Stats Badge (Toggled by cards.showQuickStats) */}
         {cards.showQuickStats && (
           <div className="border-t border-white/10 bg-black/25 backdrop-blur-md px-6 py-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-            <div>
-              <span className="text-slate-400 block text-[11px]">Akreditasi Sekolah</span>
-              <span className="font-bold text-white text-sm">Predikat {activeSchool.accreditation}</span>
-            </div>
-            <div>
-              <span className="text-slate-400 block text-[11px]">Nomor Pokok (NPSN)</span>
-              <span className="font-mono font-bold text-white text-sm">{activeSchool.npsn}</span>
-            </div>
-            <div>
-              <span className="text-slate-400 block text-[11px]">Kepala Sekolah</span>
-              <span className="font-bold text-white text-sm truncate block">{activeSchool.headmasterName}</span>
-            </div>
-            <div>
-              <span className="text-slate-400 block text-[11px]">Enkripsi Keamanan</span>
-              <span className="font-bold text-emerald-400 text-sm flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> AES-256 E2EE
-              </span>
-            </div>
+            {isSchoolConfigured ? (
+              <>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Akreditasi Sekolah</span>
+                  <span className="font-bold text-white text-sm">Predikat {activeSchool.accreditation || 'Unggul (A)'}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Nomor Pokok (NPSN)</span>
+                  <span className="font-mono font-bold text-white text-sm">{activeSchool.npsn || '30104567'}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Kepala Sekolah</span>
+                  <span className="font-bold text-white text-sm truncate block">{activeSchool.headmasterName}</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Enkripsi Keamanan</span>
+                  <span className="font-bold text-emerald-400 text-sm flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5" /> AES-256 E2EE
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Portal SIAKAD</span>
+                  <span className="font-bold text-white text-sm">Multi-Sekolah Mandiri</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Layanan Terpadu</span>
+                  <span className="font-bold text-white text-sm">Akademik, SPP, Absensi</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Standar Data</span>
+                  <span className="font-bold text-white text-sm truncate block">Dukcapil & Dapodik</span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Enkripsi Keamanan</span>
+                  <span className="font-bold text-emerald-400 text-sm flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5" /> AES-256 E2EE
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -325,7 +387,7 @@ export const SchoolPublicHomeView: React.FC<Props> = ({ setActiveTab }) => {
                     Juara 1 Olimpiade Sains & Komputasi Nasional Tingkat Provinsi
                   </h4>
                   <p className="text-xs text-slate-600 mt-0.5">
-                    Selamat kepada tim robotika dan komputasi SMPTK Budi Mulia atas raihan medali emas.
+                    Selamat kepada perwakilan siswa berprestasi atas raihan medali emas dalam kompetisi sains dan teknologi.
                   </p>
                 </div>
                 <span className="text-xs text-slate-400 font-mono whitespace-nowrap">12 Sep 2026</span>
@@ -339,36 +401,62 @@ export const SchoolPublicHomeView: React.FC<Props> = ({ setActiveTab }) => {
           <div>
             <h3 className="font-bold text-slate-900 text-base mb-3 flex items-center gap-2">
               <GraduationCap className="w-5 h-5 text-blue-600" />
-              Profil & Kontak Resmi
+              {isSchoolConfigured ? 'Profil & Kontak Sekolah' : 'Informasi & Layanan Portal'}
             </h3>
 
-            <div className="space-y-3 text-xs text-slate-600">
-              <div className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                <span>{activeSchool.address}</span>
+            {isSchoolConfigured ? (
+              <div className="space-y-3 text-xs text-slate-600">
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                  <span>{activeSchool.address}</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span>{activeSchool.contactEmail}</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span>{activeSchool.phone || '(021) 720-9988'}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-slate-400 shrink-0" />
-                <span>{activeSchool.contactEmail}</span>
+            ) : (
+              <div className="space-y-3 text-xs text-slate-600">
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                  <span>Platform SIAKAD Terintegrasi Cloud & Dapodik Nasional</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span>helpdesk@siakad.sch.id</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span>Layanan Bantuan 24/7 Nasional</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-slate-400 shrink-0" />
-                <span>(021) 720-9988 / 0811-2345-6789</span>
-              </div>
-            </div>
+            )}
 
             <div className="mt-4 pt-4 border-t border-slate-100">
-              <h4 className="font-bold text-slate-800 text-xs mb-2">Visi Pendidikan</h4>
+              <h4 className="font-bold text-slate-800 text-xs mb-2">
+                {isSchoolConfigured ? 'Visi Pendidikan Sekolah' : 'Misi Layanan SIAKAD'}
+              </h4>
               <p className="text-xs text-slate-600 leading-relaxed italic bg-blue-50/40 p-3 rounded-xl border border-blue-100/60">
-                &ldquo;Mewujudkan insan berkarakter mulia, unggul dalam sains dan teknologi, serta berdaya saing global berlandaskan integritas.&rdquo;
+                {isSchoolConfigured
+                  ? `\u201c${appearance.schoolMotto || 'Mewujudkan insan berkarakter mulia, unggul dalam sains dan teknologi, serta berdaya saing global.'}\u201d`
+                  : '\u201cMenghadirkan tata kelola akademik yang transparan, modern, aman, dan mudah diakses oleh seluruh sekolah, guru, siswa, dan orang tua di Indonesia.\u201d'}
               </p>
             </div>
           </div>
 
           <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
-            <span className="text-slate-500 font-medium">Status Geofence Sekolah</span>
+            <span className="text-slate-500 font-medium">
+              {isSchoolConfigured ? 'Status Geofence Sekolah' : 'Kesiapan Sistem & Keamanan'}
+            </span>
             <span className="font-bold text-emerald-600 flex items-center gap-1">
-              <CheckCircle className="w-3.5 h-3.5" /> Radius {activeSchool.geofenceRadiusMeters}m Aktif
+              <CheckCircle className="w-3.5 h-3.5" />
+              {isSchoolConfigured
+                ? `Radius ${activeSchool.geofenceRadiusMeters}m Aktif`
+                : 'Multi-Tenant & E2EE Aktif'}
             </span>
           </div>
         </div>

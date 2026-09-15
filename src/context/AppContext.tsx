@@ -169,10 +169,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : INITIAL_NOTIFICATIONS;
   });
 
-  // Appearance / Whitelabel Customization State
+  // Appearance / Whitelabel Customization State (Neutral Portal SIAKAD by default)
   const [appearance, setAppearance] = useState<AppearanceConfig>(() => {
     const saved = localStorage.getItem('siakad_appearance');
-    return saved ? JSON.parse(saved) : DEFAULT_APPEARANCE;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // If legacy localStorage has hardcoded specific school default, migrate to neutral Portal SIAKAD
+        if (parsed.appName === 'SIAKAD Budi Mulia' && parsed.schoolName === 'SMPTK Budi Mulia' && parsed.updatedBy === 'Admin Sekolah') {
+          return DEFAULT_APPEARANCE;
+        }
+        return parsed;
+      } catch {
+        return DEFAULT_APPEARANCE;
+      }
+    }
+    return DEFAULT_APPEARANCE;
   });
 
   // Realtime Chat State
@@ -646,10 +658,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       schoolId: newSchoolId,
       appName: 'SIAKAD ' + newSchool.name,
       schoolName: newSchool.name,
+      welcomeTitle: `SELAMAT DATANG DI ${newSchool.name.toUpperCase()}`,
+      schoolMotto: `Mewujudkan Insan Berkarakter & Unggul di ${newSchool.name}`,
+      showSchoolBadge: true,
       updatedBy: newAdmin.name,
       updatedAt: 'Baru saja',
     };
     setAppearance(customAppearance);
+    localStorage.setItem('siakad_appearance', JSON.stringify(customAppearance));
 
     await appendAuditLog(
       'SCHOOL_SELF_REGISTRATION',
@@ -698,6 +714,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updatedAt: 'Baru saja',
       updatedBy: `${currentUser.username} (${currentUser.name})`,
     };
+
+    if (config.schoolName && config.schoolName.trim() !== '') {
+      const trimmedSchool = config.schoolName.trim();
+      updated.schoolName = trimmedSchool;
+      if (!config.welcomeTitle || config.welcomeTitle === 'SELAMAT DATANG DI PORTAL SIAKAD') {
+        updated.welcomeTitle = `SELAMAT DATANG DI ${trimmedSchool.toUpperCase()}`;
+      }
+      setSchools((prev) =>
+        prev.map((s) => (s.id === activeSchoolId ? { ...s, name: trimmedSchool } : s))
+      );
+    }
+
     setAppearance(updated);
     localStorage.setItem('siakad_appearance', JSON.stringify(updated));
 
